@@ -1,0 +1,93 @@
+# MediaWiki .gitignore for RecentPageStats Extension
+
+# MediaWiki specific
+LocalSettings.php
+AdminSettings.php
+*.log
+*.sql
+.cache/
+maintenance/archives/
+maintenance/tables/
+tests/phpunit/data/
+composer.lock
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+
+# Test outputs
+coverage/
+tests/phpunit/coverage/
+test-results/
+*.test.log
+
+# Cache directories
+.cache/
+.wiki/
+cache/
+images/
+
+# Documentation build files
+docs/build/
+*.aux
+*.toc
+*.out
+*.pdf
+
+# Node.js (if using for frontend tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backup files
+*.backup
+*.old
+
+# Local configuration overrides
+config.local.php
+settings.local.php
+
+# PHPUnit
+.phpunit.result.cache
+
+# Composer vendor directory (if included)
+vendor/
+
+# Development artifacts
+dev/
+sandbox/
+*.dev.*
+
+# Performance profiling
+profiling/
+*.prof
+*.trace
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Local test data
+test-data/
+local-data/
+*.test.sql

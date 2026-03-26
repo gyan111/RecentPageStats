@@ -1,0 +1,59 @@
+{
+	"name": "RecentPageStats",
+	"version": "2.0.0",
+	"author": [
+		"[https://meta.wikimedia.org/wiki/User:Jnanaranjan_sahu Jnanaranjan Sahu]"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:RecentPageStats",
+	"descriptionmsg": "recentpagestats-desc",
+	"license-name": "MIT",
+	"type": "specialpage",
+	"requires": {
+		"MediaWiki": ">= 1.39.0",
+		"platform": {
+			"php": ">= 8.1"
+		}
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\RecentPageStats\\": "src/"
+	},
+	"SpecialPages": {
+		"RecentPageStats": "MediaWiki\\Extension\\RecentPageStats\\Special\\SpecialRecentPageStats",
+		"RecentChangesStats": "MediaWiki\\Extension\\RecentPageStats\\Special\\SpecialRecentChangesStats"
+	},
+	"MessagesDirs": {
+		"RecentPageStats": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"RecentPageStatsAlias": "RecentPageStats.alias.php"
+	},
+	"ResourceModules": {
+		"ext.recentPageStats.styles": {
+			"styles": "resources/RecentPageStats.css"
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "RecentPageStats"
+	},
+	"AvailableRights": [
+		"recentpagestats-view"
+	],
+	"config": {
+		"RecentPageStatsDefaultDays": {
+			"value": 30,
+			"description": "Default number of days to look back for recent edits"
+		},
+		"RecentPageStatsPerPage": {
+			"value": 50,
+			"description": "Number of results per page"
+		},
+		"RecentPageStatsCacheDuration": {
+			"value": 300,
+			"description": "Cache duration in seconds (5 minutes default)"
+		}
+	},
+	"manifest_version": 2
+}

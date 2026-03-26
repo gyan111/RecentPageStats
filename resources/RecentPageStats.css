@@ -1,0 +1,167 @@
+/**
+ * Styles for RecentPageStats extension
+ * Covers both Special:RecentPageStats and Special:RecentChangesStats
+ */
+
+/* ============================
+   Navigation link between pages
+   ============================ */
+.recentpagestats-nav {
+	background: #eaf3ff;
+	border: 1px solid #a7d7f9;
+	border-radius: 4px;
+	padding: 8px 16px;
+	margin-bottom: 16px;
+	font-size: 0.95em;
+}
+
+/* ============================
+   Special:RecentPageStats table
+   ============================ */
+.recentpagestats-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1em;
+}
+
+.recentpagestats-table th {
+	background-color: #eaecf0;
+	font-weight: bold;
+	padding: 8px 12px;
+	text-align: left;
+	border: 1px solid #a2a9b1;
+}
+
+.recentpagestats-table td {
+	padding: 6px 12px;
+	border: 1px solid #a2a9b1;
+	vertical-align: top;
+}
+
+.recentpagestats-table tr:nth-child(even) {
+	background-color: #f8f9fa;
+}
+
+.recentpagestats-table tr:hover {
+	background-color: #eaf3ff;
+}
+
+.recentpagestats-table th a {
+	color: #202122;
+	text-decoration: none;
+}
+
+.recentpagestats-table th a:hover {
+	text-decoration: underline;
+}
+
+/* Align numeric columns to the right */
+.recentpagestats-table td:last-child {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Timestamp column styling */
+.recentpagestats-table td:nth-child(3) {
+	white-space: nowrap;
+	font-family: monospace;
+	font-size: 0.95em;
+}
+
+/* ============================
+   Special:RecentChangesStats
+   Dashboard summary cards
+   ============================ */
+.rcstats-dashboard {
+	background: #f8f9fa;
+	border: 1px solid #a2a9b1;
+	border-radius: 4px;
+	padding: 16px;
+	margin-bottom: 24px;
+}
+
+.rcstats-dashboard h3 {
+	margin: 0 0 16px 0;
+	font-size: 1.2em;
+	color: #202122;
+	border-bottom: 2px solid #0645ad;
+	padding-bottom: 8px;
+}
+
+.rcstats-cards-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 16px;
+}
+
+.rcstats-card {
+	background: white;
+	border: 1px solid #a2a9b1;
+	border-radius: 4px;
+	padding: 16px;
+	text-align: center;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rcstats-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.rcstats-card-value {
+	font-size: 2em;
+	font-weight: bold;
+	color: #0645ad;
+	margin-bottom: 8px;
+}
+
+.rcstats-card-label {
+	font-size: 0.85em;
+	color: #54595d;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+/* ============================
+   Section containers
+   ============================ */
+.rcstats-section {
+	margin-bottom: 24px;
+}
+
+.rcstats-section h3 {
+	margin: 0 0 12px 0;
+	font-size: 1.15em;
+	color: #202122;
+	border-bottom: 1px solid #a2a9b1;
+	padding-bottom: 6px;
+}
+
+/* ============================
+   Tables in dashboard
+   ============================ */
+.rcstats-table {
+	margin-top: 0;
+}
+
+.rcstats-num {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+/* ============================
+   Daily activity bar chart
+   ============================ */
+.rcstats-bar-cell {
+	width: 200px;
+	padding: 6px 12px;
+}
+
+.rcstats-bar {
+	height: 16px;
+	background: #0645ad;
+	border-radius: 2px;
+	min-width: 2px;
+	transition: width 0.3s ease;
+}
