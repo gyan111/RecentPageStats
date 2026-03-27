@@ -2,6 +2,8 @@
 
 A MediaWiki extension providing two special pages for understanding recent editing activity on your wiki.
 
+**GitHub:** https://github.com/gyan111/RecentPageStats
+
 ## Two Special Pages
 
 ### Special:RecentPageStats — Per-page edit table
@@ -220,3 +222,7 @@ Wikimedia Meta: https://meta.wikimedia.org/wiki/User:Jnanaranjan_sahu
 
 ### Version 1.0.0
 - Initial release with per-page statistics, filters, pagination, page size, minor edits filter
+
+## Development Notes
+
+This extension was developed with the assistance of AI tools. All code has been reviewed, tested, and maintained by the author.
