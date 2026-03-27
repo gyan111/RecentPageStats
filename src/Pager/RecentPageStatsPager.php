@@ -85,14 +85,14 @@ class RecentPageStatsPager extends TablePager {
 		}
 
 		return [
-			'tables' => [ 'recentchanges', 'page' ],
+			'tables' => [ 'recentchanges', 'page', 'actor' ],
 			'fields' => [
 				'page_id',
 				'page_namespace',
 				'page_title',
 				'page_len',
 				'last_timestamp' => 'MAX(rc_timestamp)',
-				'last_user_text' => 'SUBSTRING_INDEX(GROUP_CONCAT(rc_user_text ORDER BY rc_timestamp DESC SEPARATOR \'|\'), \'|\', 1)',
+				'last_user_text' => 'SUBSTRING_INDEX(GROUP_CONCAT(actor_name ORDER BY rc_timestamp DESC SEPARATOR \'|\'), \'|\', 1)',
 				'edit_count' => 'COUNT(*)',
 			],
 			'conds' => $conds,
@@ -106,6 +106,10 @@ class RecentPageStatsPager extends TablePager {
 						'rc_namespace = page_namespace',
 						'rc_title = page_title',
 					],
+				],
+				'actor' => [
+					'INNER JOIN',
+					'rc_actor = actor_id',
 				],
 			],
 		];
