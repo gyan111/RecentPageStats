@@ -220,7 +220,7 @@ class RecentPageStatsPager extends TablePager {
 	}
 	
 	/** @inheritDoc */
-	protected function reallyDoQuery( $offset, $limit, $order ) {
+	public function reallyDoQuery( $offset, $limit, $order ) {
 		$queryInfo = $this->getQueryInfo();
 		$tables = $queryInfo['tables'];
 		$fields = $queryInfo['fields'];
