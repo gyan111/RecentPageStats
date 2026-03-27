@@ -144,7 +144,7 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 						"Test edit " . ( $j + 1 ) . " of $numEdits" 
 					);
 					
-					$updater->saveRevision( $summary, EDIT_NEW | EDIT_SUPPRESS_RC );
+					$updater->saveRevision( $summary, EDIT_NEW );
 					
 					// Update timestamp to spread over the days
 					$this->updateRecentChangeTimestamp( $title, $daysSpread );
