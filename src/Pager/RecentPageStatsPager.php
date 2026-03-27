@@ -47,13 +47,13 @@ class RecentPageStatsPager extends TablePager {
 		bool $includeMinor = true,
 		bool $bypassCache = false
 	) {
-		parent::__construct( $context );
-
 		$this->days = $days;
 		$this->namespace = $namespace;
 		$this->sortBy = $sortBy;
 		$this->includeMinor = $includeMinor;
 		$this->bypassCache = $bypassCache;
+
+		parent::__construct( $context );
 
 		$services = MediaWikiServices::getInstance();
 		$this->linkRenderer = $services->getLinkRenderer();
