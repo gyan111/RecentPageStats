@@ -53,6 +53,9 @@ class RecentPageStatsPager extends TablePager {
 		$this->includeMinor = $includeMinor;
 		$this->bypassCache = $bypassCache;
 
+		// Set explicit sort field before calling parent to avoid empty key warnings
+		$context->getRequest()->setVal( 'sort', $this->getDefaultSort() );
+		
 		parent::__construct( $context );
 
 		$services = MediaWikiServices::getInstance();
