@@ -218,6 +218,40 @@ class RecentPageStatsPager extends TablePager {
 			'page_id' => IndexPager::DIR_DESCENDING,
 		];
 	}
+	
+	/** @inheritDoc */
+	protected function reallyDoQuery( $offset, $limit, $order ) {
+		$queryInfo = $this->getQueryInfo();
+		$tables = $queryInfo['tables'];
+		$fields = $queryInfo['fields'];
+		$conds = $queryInfo['conds'] ?? [];
+		$options = $queryInfo['options'] ?? [];
+		$join_conds = $queryInfo['join_conds'] ?? [];
+		
+		// Add LIMIT
+		$options['LIMIT'] = $limit;
+		
+		// Add ORDER BY - handle both regular fields and aggregates
+		if ( $order ) {
+			$orderBy = [];
+			foreach ( $order as $field => $dir ) {
+				$direction = $dir === self::DIR_DESCENDING ? 'DESC' : 'ASC';
+				// For aggregate fields, use them directly
+				if ( $field === 'edit_count' ) {
+					$orderBy[] = "COUNT(*) $direction";
+				} elseif ( $field === 'last_timestamp' ) {
+					$orderBy[] = "MAX(rc_timestamp) $direction";
+				} else {
+					$orderBy[] = "$field $direction";
+				}
+			}
+			if ( $orderBy ) {
+				$options['ORDER BY'] = $orderBy;
+			}
+		}
+		
+		return $this->mDb->select( $tables, $fields, $conds, __METHOD__, $options, $join_conds );
+	}
 
 	/** @inheritDoc */
 	protected function preprocessResults( $result ) {
