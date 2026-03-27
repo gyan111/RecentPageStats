@@ -25,6 +25,7 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$this->addOption( 'pages', 'Number of pages to create (default: 50)', false, true );
 		$this->addOption( 'edits', 'Maximum edits per page (default: 10)', false, true );
 		$this->addOption( 'days', 'Spread edits over this many days (default: 30)', false, true );
+		$this->addOption( 'edit-existing', 'Number of existing pages to edit (default: 0)', false, true );
 		$this->requireExtension( 'RecentPageStats' );
 	}
 
@@ -32,9 +33,14 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$numPages = (int)$this->getOption( 'pages', 50 );
 		$maxEdits = (int)$this->getOption( 'edits', 10 );
 		$daysSpread = (int)$this->getOption( 'days', 30 );
+		$editExisting = (int)$this->getOption( 'edit-existing', 0 );
 		
 		$this->output( "Generating test data for RecentPageStats extension...\n" );
-		$this->output( "Pages: $numPages, Max edits per page: $maxEdits, Days spread: $daysSpread\n\n" );
+		$this->output( "Pages: $numPages, Max edits per page: $maxEdits, Days spread: $daysSpread" );
+		if ( $editExisting > 0 ) {
+			$this->output( ", Edit existing: $editExisting" );
+		}
+		$this->output( "\n\n" );
 		
 		$services = MediaWikiServices::getInstance();
 		$wikiPageFactory = $services->getWikiPageFactory();
@@ -190,6 +196,14 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 			}
 		}
 		
+		// Edit existing pages if requested
+		if ( $editExisting > 0 ) {
+			$this->output( "\nEditing existing pages...\n" );
+			$editedCount = $this->editExistingPages( $editExisting, $users, $maxEdits, $daysSpread );
+			$this->output( "Edited $editedCount existing pages\n" );
+			$totalEdits += $editedCount * 2; // Approximate
+		}
+		
 		// Rebuild recent changes to ensure everything is indexed
 		$this->output( "\nRebuilding recent changes table...\n" );
 		$this->rebuildRecentChanges();
@@ -200,6 +214,103 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$this->output( "Test users: " . count( $users ) . "\n" );
 		$this->output( "\nDone! Visit Special:RecentPageStats to see the results.\n" );
 		$this->output( "URL: " . SpecialPage::getTitleFor( 'RecentPageStats' )->getFullURL() . "\n" );
+	}
+	
+	/**
+	 * Edit existing pages with new content from random users
+	 *
+	 * @param int $numPages
+	 * @param array $users
+	 * @param int $maxEdits
+	 * @param int $daysSpread
+	 * @return int Number of pages edited
+	 */
+	private function editExistingPages( int $numPages, array $users, int $maxEdits, int $daysSpread ): int {
+		$services = MediaWikiServices::getInstance();
+		$wikiPageFactory = $services->getWikiPageFactory();
+		$dbr = $this->getDB( DB_REPLICA );
+		
+		// Get random existing pages
+		$result = $dbr->select(
+			'page',
+			[ 'page_namespace', 'page_title' ],
+			[],
+			__METHOD__,
+			[
+				'ORDER BY' => 'RAND()',
+				'LIMIT' => $numPages
+			]
+		);
+		
+		$editedCount = 0;
+		$sampleTexts = [
+			"This article has been updated with the latest information and research. ",
+			"Recent developments have brought new insights to this topic. ",
+			"Experts continue to refine our understanding of this subject. ",
+			"New data and analysis have enhanced this article. ",
+			"This content has been revised to reflect current knowledge. ",
+			"Additional research has expanded our perspective on this topic. "
+		];
+		
+		foreach ( $result as $row ) {
+			$title = Title::makeTitle( $row->page_namespace, $row->page_title );
+			if ( !$title || !$title->exists() ) {
+				continue;
+			}
+			
+			$page = $wikiPageFactory->newFromTitle( $title );
+			$numEdits = rand( 1, min( $maxEdits, 5 ) );
+			
+			for ( $j = 0; $j < $numEdits; $j++ ) {
+				$user = $users[ array_rand( $users ) ];
+				
+				// Get current content and append to it
+				$content = $page->getContent();
+				if ( !$content ) {
+					continue;
+				}
+				
+				$text = $content->getText();
+				$text .= "\n\n== Update by {$user->getName()} ==\n\n";
+				
+				// Add a few sentences
+				for ( $s = 0; $s < rand( 2, 4 ); $s++ ) {
+					$text .= $sampleTexts[ array_rand( $sampleTexts ) ];
+				}
+				
+				$wikiContent = new WikitextContent( $text );
+				
+				try {
+					$updater = $page->newPageUpdater( $user );
+					$updater->setContent( SlotRecord::MAIN, $wikiContent );
+					
+					// Randomly mark as minor edit
+					if ( rand( 1, 100 ) <= 30 ) {
+						$updater->setFlags( EDIT_MINOR );
+					}
+					
+					$summary = CommentStoreComment::newUnsavedComment( 
+						"Updated by {$user->getName()}"
+					);
+					
+					$updater->saveRevision( $summary );
+					
+					// Update timestamp to spread over the days
+					$this->updateRecentChangeTimestamp( $title, $daysSpread );
+					
+				} catch ( Exception $e ) {
+					$this->output( "  Error editing {$title->getPrefixedText()}: {$e->getMessage()}\n" );
+					continue 2;
+				}
+			}
+			
+			$editedCount++;
+			if ( $editedCount % 5 == 0 ) {
+				$this->output( "  Progress: $editedCount pages edited\n" );
+			}
+		}
+		
+		return $editedCount;
 	}
 	
 	/**
