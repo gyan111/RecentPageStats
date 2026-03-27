@@ -149,9 +149,30 @@ Both pages use **WANObjectCache**:
 # Run integration tests
 php tests/phpunit/phpunit.php extensions/RecentPageStats/tests/
 
-# Generate test data
-php extensions/RecentPageStats/maintenance/generateTestData.php --pages=50 --edits=10
+# Generate test data - creates new pages with random topics and Indian usernames
+php extensions/RecentPageStats/maintenance/generateTestData.php \
+  --pages=50 \
+  --edits=10 \
+  --days=30
+
+# Add edits to existing pages (for more realistic test data)
+php extensions/RecentPageStats/maintenance/generateTestData.php \
+  --pages=0 \
+  --edit-existing=30 \
+  --edits=5
+
+# Combined: create 20 new pages AND edit 40 existing pages
+php extensions/RecentPageStats/maintenance/generateTestData.php \
+  --pages=20 \
+  --edit-existing=40 \
+  --edits=8
 ```
+
+**Test data includes:**
+- Random article topics (AI, Cricket, Yoga, Blockchain, etc.)
+- Multiple namespaces (Main, User, Help, Project)
+- Edits spread over specified days
+- Minor edits (30% chance)
 
 See [TESTING.md](TESTING.md) for full guide and [QUICKSTART.md](QUICKSTART.md) for 5-minute setup.
 

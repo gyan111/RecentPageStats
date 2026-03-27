@@ -91,11 +91,12 @@ class RecentPageStatsPager extends TablePager {
 			'GROUP BY' => [ 'page_id', 'page_namespace', 'page_title', 'page_len' ],
 		];
 		
-		// Add explicit ORDER BY for default sort
+		// Always add explicit ORDER BY based on sortBy parameter
+		// This ensures the form selection is respected
 		if ( $this->sortBy === 'count' ) {
-			$options['ORDER BY'] = 'edit_count DESC';
+			$options['ORDER BY'] = [ 'edit_count DESC', 'last_timestamp DESC' ];
 		} else {
-			$options['ORDER BY'] = 'last_timestamp DESC';
+			$options['ORDER BY'] = [ 'last_timestamp DESC', 'edit_count DESC' ];
 		}
 		
 		return [
@@ -202,7 +203,8 @@ class RecentPageStatsPager extends TablePager {
 
 	/** @inheritDoc */
 	public function isFieldSortable( $field ): bool {
-		return in_array( $field, [ 'last_timestamp', 'edit_count', 'page_id' ] );
+		// Disable column header sorting since we use form controls
+		return false;
 	}
 
 	/** @inheritDoc */

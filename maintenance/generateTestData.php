@@ -46,7 +46,6 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$wikiPageFactory = $services->getWikiPageFactory();
 		$userFactory = $services->getUserFactory();
 		
-		// Create test users with Indian names
 		$usernames = [ 'Arun', 'Priya', 'Rajesh', 'Sneha', 'Vikram', 'Anjali', 'Karthik', 'Deepa', 'Suresh', 'Meera' ];
 		$users = [];
 		
