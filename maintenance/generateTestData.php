@@ -45,7 +45,6 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$users = [];
 		
 		$this->output( "Creating test users...\n" );
-		$authManager = $services->getAuthManager();
 		foreach ( $usernames as $username ) {
 			$user = $userFactory->newFromName( $username );
 			if ( !$user ) {
@@ -54,11 +53,6 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 			
 			if ( !$user->getId() ) {
 				$user->addToDatabase();
-				
-				// Use AuthManager to set password in MW 1.41+
-				$passwordFactory = $services->getPasswordFactory();
-				$password = $passwordFactory->newFromPlaintext( 'TestPassword123!' );
-				$user->setInternalPassword( $password );
 				
 				// Set real name for some users (to test real name display)
 				if ( rand( 0, 1 ) ) {
