@@ -195,7 +195,7 @@ class RecentPageStatsPager extends TablePager {
 
 	/** @inheritDoc */
 	public function getIndexField() {
-		return $this->sortBy === 'count' ? 'edit_count' : 'last_timestamp';
+		return 'page_id';
 	}
 
 	/** @inheritDoc */
