@@ -40,8 +40,8 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$wikiPageFactory = $services->getWikiPageFactory();
 		$userFactory = $services->getUserFactory();
 		
-		// Create test users
-		$usernames = [ 'Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace' ];
+		// Create test users with Indian names
+		$usernames = [ 'Arun', 'Priya', 'Rajesh', 'Sneha', 'Vikram', 'Anjali', 'Karthik', 'Deepa', 'Suresh', 'Meera' ];
 		$users = [];
 		
 		$this->output( "Creating test users...\n" );
@@ -82,6 +82,20 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 			NS_PROJECT => 'Project',
 		];
 		
+		// Random article topics
+		$topics = [
+			'Indian Classical Music', 'Artificial Intelligence', 'Cricket World Cup',
+			'Yoga and Meditation', 'Blockchain Technology', 'Bollywood Cinema',
+			'Indian Cuisine', 'Machine Learning', 'Space Exploration',
+			'Ancient Indian History', 'Renewable Energy', 'Digital Marketing',
+			'Software Development', 'Ayurvedic Medicine', 'Indian Festivals',
+			'Quantum Computing', 'Wildlife Conservation', 'Climate Change',
+			'Indian Architecture', 'Cryptocurrency', 'Social Media Marketing',
+			'Indian Literature', 'Cloud Computing', 'Organic Farming',
+			'Data Science', 'Traditional Dance Forms', 'Mobile Apps',
+			'Indian Mythology', 'Cybersecurity', 'Sustainable Development'
+		];
+		
 		$createdPages = 0;
 		$totalEdits = 0;
 		
@@ -90,8 +104,8 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 			$ns = array_rand( $namespaces );
 			$nsName = $namespaces[$ns];
 			
-			// Create title
-			$titleText = "TestPage_" . str_pad( $i, 4, '0', STR_PAD_LEFT );
+			// Create random article title
+			$titleText = $topics[ array_rand( $topics ) ] . ' ' . rand( 2020, 2026 );
 			$title = Title::makeTitle( $ns, $titleText );
 			
 			if ( !$title || !$title->canExist() ) {
@@ -118,10 +132,22 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 				$content = "= {$title->getText()} =\n\n";
 				$content .= "This is a test page created for RecentPageStats extension testing.\n\n";
 				
+				// Generate varied content
+				$sampleTexts = [
+					"This article explores the rich cultural heritage and modern developments in this field. ",
+					"Recent research has shown significant progress and innovation in this area. ",
+					"Experts from around the world have contributed to advancing our understanding. ",
+					"The historical context provides valuable insights into current practices. ",
+					"Modern technology has transformed how we approach this subject. ",
+					"Traditional knowledge combined with contemporary methods creates new opportunities. ",
+					"This field continues to evolve with changing global trends and demands. ",
+					"Practitioners emphasize the importance of sustainable and ethical approaches. "
+				];
+				
 				for ( $p = 0; $p < $paragraphs; $p++ ) {
-					$sentences = rand( 3, 8 );
+					$sentences = rand( 3, 6 );
 					for ( $s = 0; $s < $sentences; $s++ ) {
-						$content .= "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+						$content .= $sampleTexts[ array_rand( $sampleTexts ) ];
 					}
 					$content .= "\n\n";
 				}
