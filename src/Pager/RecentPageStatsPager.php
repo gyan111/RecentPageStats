@@ -87,6 +87,17 @@ class RecentPageStatsPager extends TablePager {
 			$conds['rc_minor'] = 0;
 		}
 
+		$options = [
+			'GROUP BY' => [ 'page_id', 'page_namespace', 'page_title', 'page_len' ],
+		];
+		
+		// Add explicit ORDER BY for default sort
+		if ( $this->sortBy === 'count' ) {
+			$options['ORDER BY'] = 'edit_count DESC';
+		} else {
+			$options['ORDER BY'] = 'last_timestamp DESC';
+		}
+		
 		return [
 			'tables' => [ 'recentchanges', 'page', 'actor' ],
 			'fields' => [
@@ -99,9 +110,7 @@ class RecentPageStatsPager extends TablePager {
 				'edit_count' => 'COUNT(*)',
 			],
 			'conds' => $conds,
-			'options' => [
-				'GROUP BY' => [ 'page_id', 'page_namespace', 'page_title', 'page_len' ],
-			],
+			'options' => $options,
 			'join_conds' => [
 				'page' => [
 					'INNER JOIN',
