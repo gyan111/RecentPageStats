@@ -154,7 +154,7 @@ class SpecialRecentPageStats extends SpecialPage {
 		if ( $pager->getNumRows() > 0 ) {
 			$out->addHTML(
 				$pager->getNavigationBar() .
-				$pager->getBody() .
+				$pager->getBodyOutput()->getText() .
 				$pager->getNavigationBar()
 			);
 		} else {

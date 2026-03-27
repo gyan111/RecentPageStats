@@ -190,12 +190,12 @@ class RecentPageStatsPager extends TablePager {
 
 	/** @inheritDoc */
 	public function isFieldSortable( $field ): bool {
-		return in_array( $field, [ 'last_timestamp', 'edit_count' ] );
+		return in_array( $field, [ 'last_timestamp', 'edit_count', 'page_id' ] );
 	}
 
 	/** @inheritDoc */
 	public function getIndexField() {
-		return 'page_id';
+		return $this->sortBy === 'count' ? 'edit_count' : 'last_timestamp';
 	}
 
 	/** @inheritDoc */
@@ -208,6 +208,7 @@ class RecentPageStatsPager extends TablePager {
 		return [
 			'last_timestamp' => IndexPager::DIR_DESCENDING,
 			'edit_count' => IndexPager::DIR_DESCENDING,
+			'page_id' => IndexPager::DIR_DESCENDING,
 		];
 	}
 
