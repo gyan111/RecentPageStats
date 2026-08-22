@@ -2,7 +2,7 @@
 
 A MediaWiki extension providing two special pages for understanding recent editing activity on your wiki.
 
-**GitHub:** https://github.com/gyan111/RecentPageStats
+**Source:** [Wikimedia Gerrit](https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/extensions/RecentPageStats/) ([GitHub mirror](https://github.com/wikimedia/mediawiki-extensions-RecentPageStats))
 
 ## Two Special Pages
 
@@ -45,7 +45,7 @@ Both pages link to each other for easy navigation.
 
 ```bash
 cd extensions/
-git clone <repository-url> RecentPageStats
+git clone https://gerrit.wikimedia.org/r/mediawiki/extensions/RecentPageStats
 ```
 
 Add to `LocalSettings.php`:
@@ -87,9 +87,6 @@ RecentPageStats/
 ├── extension.json                  # Extension manifest (v2)
 ├── RecentPageStats.alias.php       # Special page aliases
 ├── README.md
-├── TESTING.md                      # Full testing guide
-├── QUICKSTART.md                   # 5-minute setup
-├── PRESENTATION.md                 # Meetup presentation guide
 ├── src/
 │   ├── Special/
 │   │   ├── SpecialRecentPageStats.php      # Per-page table
@@ -151,32 +148,9 @@ Both pages use **WANObjectCache**:
 # Run integration tests
 php tests/phpunit/phpunit.php extensions/RecentPageStats/tests/
 
-# Generate test data - creates new pages with random topics and Indian usernames
-php extensions/RecentPageStats/maintenance/generateTestData.php \
-  --pages=50 \
-  --edits=10 \
-  --days=30
-
-# Add edits to existing pages (for more realistic test data)
-php extensions/RecentPageStats/maintenance/generateTestData.php \
-  --pages=0 \
-  --edit-existing=30 \
-  --edits=5
-
-# Combined: create 20 new pages AND edit 40 existing pages
-php extensions/RecentPageStats/maintenance/generateTestData.php \
-  --pages=20 \
-  --edit-existing=40 \
-  --edits=8
+# Generate sample test data
+php extensions/RecentPageStats/maintenance/generateTestData.php --pages=50 --edits=10 --days=30
 ```
-
-**Test data includes:**
-- Random article topics (AI, Cricket, Yoga, Blockchain, etc.)
-- Multiple namespaces (Main, User, Help, Project)
-- Edits spread over specified days
-- Minor edits (30% chance)
-
-See [TESTING.md](TESTING.md) for full guide and [QUICKSTART.md](QUICKSTART.md) for 5-minute setup.
 
 ## Internationalization
 
