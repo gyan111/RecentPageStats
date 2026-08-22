@@ -2,7 +2,7 @@
 /**
  * Generate test data for RecentPageStats extension
  *
- * This maintenance script creates test pages with realistic edit patterns
+ * This maintenance script creates test pages with sample edit patterns
  * to test the RecentPageStats extension.
  *
  * Usage:
@@ -45,8 +45,7 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 		$services = MediaWikiServices::getInstance();
 		$wikiPageFactory = $services->getWikiPageFactory();
 		$userFactory = $services->getUserFactory();
-
-		$usernames = [ 'Arun', 'Priya', 'Rajesh', 'Sneha', 'Vikram', 'Anjali', 'Karthik', 'Deepa', 'Suresh', 'Meera' ];
+		$usernames = [ 'Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Hank', 'Ivy', 'Jack' ];
 		$users = [];
 
 		$this->output( "Creating test users...\n" );
@@ -87,20 +86,11 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 			NS_PROJECT => 'Project',
 		];
 
-		// Random article topics
-		$topics = [
-			'Indian Classical Music', 'Artificial Intelligence', 'Cricket World Cup',
-			'Yoga and Meditation', 'Blockchain Technology', 'Bollywood Cinema',
-			'Indian Cuisine', 'Machine Learning', 'Space Exploration',
-			'Ancient Indian History', 'Renewable Energy', 'Digital Marketing',
-			'Software Development', 'Ayurvedic Medicine', 'Indian Festivals',
-			'Quantum Computing', 'Wildlife Conservation', 'Climate Change',
-			'Indian Architecture', 'Cryptocurrency', 'Social Media Marketing',
-			'Indian Literature', 'Cloud Computing', 'Organic Farming',
-			'Data Science', 'Traditional Dance Forms', 'Mobile Apps',
-			'Indian Mythology', 'Cybersecurity', 'Sustainable Development'
-		];
-
+		// Sample page titles for test pages
+		$topics = [];
+		for ( $t = 1; $t <= 30; $t++ ) {
+			$topics[] = 'Sample Topic ' . $t;
+		}
 		$createdPages = 0;
 		$totalEdits = 0;
 
@@ -139,14 +129,14 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 
 				// Generate varied content
 				$sampleTexts = [
-					"This article explores the rich cultural heritage and modern developments in this field. ",
-					"Recent research has shown significant progress and innovation in this area. ",
-					"Experts from around the world have contributed to advancing our understanding. ",
-					"The historical context provides valuable insights into current practices. ",
-					"Modern technology has transformed how we approach this subject. ",
-					"Traditional knowledge combined with contemporary methods creates new opportunities. ",
-					"This field continues to evolve with changing global trends and demands. ",
-					"Practitioners emphasize the importance of sustainable and ethical approaches. "
+					"Lorem ipsum dolor sit amet. ",
+					"Consectetur adipiscing elit. ",
+					"Sed do eiusmod tempor incididunt. ",
+					"Ut labore et dolore magna aliqua. ",
+					"Ut enim ad minim veniam. ",
+					"Quis nostrud exercitation ullamco. ",
+					"Duis aute irure dolor in reprehenderit. ",
+					"Excepteur sint occaecat cupidatat non proident. "
 				];
 
 				for ( $p = 0; $p < $paragraphs; $p++ ) {
@@ -244,12 +234,12 @@ class GenerateRecentPageStatsTestData extends Maintenance {
 
 		$editedCount = 0;
 		$sampleTexts = [
-			"This article has been updated with the latest information and research. ",
-			"Recent developments have brought new insights to this topic. ",
-			"Experts continue to refine our understanding of this subject. ",
-			"New data and analysis have enhanced this article. ",
-			"This content has been revised to reflect current knowledge. ",
-			"Additional research has expanded our perspective on this topic. "
+			"Lorem ipsum dolor sit amet. ",
+			"Consectetur adipiscing elit. ",
+			"Sed do eiusmod tempor incididunt. ",
+			"Ut labore et dolore magna aliqua. ",
+			"Ut enim ad minim veniam. ",
+			"Quis nostrud exercitation ullamco. "
 		];
 
 		foreach ( $result as $row ) {
