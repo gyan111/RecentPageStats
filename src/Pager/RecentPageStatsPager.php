@@ -13,6 +13,7 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Title\Title;
 use MediaWiki\User\UserFactory;
 use MWTimestamp;
+use RecentChange;
 use SpecialPage;
 use TablePager;
 use WANObjectCache;
@@ -75,7 +76,7 @@ class RecentPageStatsPager extends TablePager {
 
 		$conds = [
 			'rc_timestamp >= ' . $dbr->addQuotes( $cutoffTimestamp ),
-			'rc_type' => [ RC_EDIT, RC_NEW ],
+			'rc_source' => [ RecentChange::SRC_EDIT, RecentChange::SRC_NEW ],
 		];
 
 		if ( $this->namespace !== null ) {
@@ -215,6 +216,7 @@ class RecentPageStatsPager extends TablePager {
 	/** @inheritDoc */
 	public function getDefaultDirections() {
 		return [
+			'' => IndexPager::DIR_DESCENDING,
 			'last_timestamp' => IndexPager::DIR_DESCENDING,
 			'edit_count' => IndexPager::DIR_DESCENDING,
 			'page_id' => IndexPager::DIR_DESCENDING,
@@ -300,7 +302,7 @@ class RecentPageStatsPager extends TablePager {
 
 		$conds = [
 			'rc_timestamp >= ' . $dbr->addQuotes( $cutoffTimestamp ),
-			'rc_type' => [ RC_EDIT, RC_NEW ],
+			'rc_source' => [ RecentChange::SRC_EDIT, RecentChange::SRC_NEW ],
 		];
 
 		if ( $this->namespace !== null ) {
@@ -316,7 +318,7 @@ class RecentPageStatsPager extends TablePager {
 			[
 				'total_pages' => 'COUNT(DISTINCT page_id)',
 				'total_edits' => 'COUNT(*)',
-				'unique_editors' => 'COUNT(DISTINCT rc_user_text)',
+				'unique_editors' => 'COUNT(DISTINCT rc_actor)',
 			],
 			$conds,
 			__METHOD__,

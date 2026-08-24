@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\RecentPageStats\Special;
 use Html;
 use HTMLForm;
 use MediaWiki\MediaWikiServices;
+use RecentChange;
 use SpecialPage;
 use WANObjectCache;
 
@@ -140,7 +141,7 @@ class SpecialRecentChangesStats extends SpecialPage {
 
 		$conds = [
 			'rc_timestamp >= ' . $dbr->addQuotes( $cutoff ),
-			'rc_type' => [ RC_EDIT, RC_NEW ],
+			'rc_source' => [ RecentChange::SRC_EDIT, RecentChange::SRC_NEW ],
 		];
 
 		if ( !$this->includeMinor ) {
@@ -154,7 +155,8 @@ class SpecialRecentChangesStats extends SpecialPage {
 				'total_edits' => 'COUNT(*)',
 				'total_pages' => 'COUNT(DISTINCT rc_cur_id)',
 				'unique_editors' => 'COUNT(DISTINCT actor_id)',
-				'new_pages' => 'SUM(CASE WHEN rc_type = ' . RC_NEW . ' THEN 1 ELSE 0 END)',
+				'new_pages' => 'SUM(CASE WHEN rc_source = ' .
+					$dbr->addQuotes( RecentChange::SRC_NEW ) . ' THEN 1 ELSE 0 END)',
 				'minor_edits' => 'SUM(CASE WHEN rc_minor = 1 THEN 1 ELSE 0 END)',
 				'avg_edits_per_page' => 'COUNT(*) / NULLIF(COUNT(DISTINCT rc_cur_id), 0)',
 			],

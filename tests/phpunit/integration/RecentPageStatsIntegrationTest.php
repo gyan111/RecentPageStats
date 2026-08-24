@@ -19,10 +19,14 @@ use RequestContext;
  */
 class RecentPageStatsIntegrationTest extends MediaWikiIntegrationTestCase {
 
+	protected array $tablesUsed = [
+		'page',
+		'recentchanges',
+		'actor',
+	];
+
 	protected function setUp(): void {
 		parent::setUp();
-		$this->tablesUsed[] = 'page';
-		$this->tablesUsed[] = 'recentchanges';
 	}
 
 	/**
