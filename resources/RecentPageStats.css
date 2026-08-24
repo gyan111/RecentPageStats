@@ -38,7 +38,7 @@
 	vertical-align: top;
 }
 
-.recentpagestats-table tr:nth-child(even) {
+.recentpagestats-table tr:nth-child( even ) {
 	background-color: #f8f9fa;
 }
 
@@ -62,7 +62,7 @@
 }
 
 /* Timestamp column styling */
-.recentpagestats-table td:nth-child(3) {
+.recentpagestats-table td:nth-child( 3 ) {
 	white-space: nowrap;
 	font-family: monospace;
 	font-size: 0.95em;
@@ -90,23 +90,23 @@
 
 .rcstats-cards-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	grid-template-columns: repeat( auto-fit, minmax( 160px, 1fr ) );
 	gap: 16px;
 }
 
 .rcstats-card {
-	background: white;
+	background: #fff;
 	border: 1px solid #a2a9b1;
 	border-radius: 4px;
 	padding: 16px;
 	text-align: center;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.1 );
 	transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .rcstats-card:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+	transform: translateY( -2px );
+	box-shadow: 0 3px 8px rgba( 0, 0, 0, 0.15 );
 }
 
 .rcstats-card-value {

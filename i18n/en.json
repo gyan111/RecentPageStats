@@ -52,5 +52,7 @@
 	"recentchangesstats-daily-edits": "Edits",
 	"recentchangesstats-daily-pages": "Pages",
 	"recentchangesstats-daily-editors": "Editors",
-	"recentchangesstats-daily-activity": "Activity"
+	"recentchangesstats-daily-activity": "Activity",
+	"action-recentpagestats-view": "view recent pages statistics",
+	"right-recentpagestats-view": "View recent pages statistics"
 }

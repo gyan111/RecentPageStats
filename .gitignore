@@ -39,11 +39,14 @@ tests/phpunit/coverage/
 test-results/
 *.test.log
 
-# Cache directories
+# Cache directories and files
 .cache/
 .wiki/
 cache/
 images/
+/.phpunit.result.cache
+/.stylelintcache
+.eslintcache
 
 # Documentation build files
 docs/build/
@@ -65,9 +68,6 @@ yarn-error.log*
 # Local configuration overrides
 config.local.php
 settings.local.php
-
-# PHPUnit
-.phpunit.result.cache
 
 # Composer vendor directory (if included)
 vendor/

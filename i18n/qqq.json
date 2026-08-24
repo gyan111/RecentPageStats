@@ -52,5 +52,7 @@
 	"recentchangesstats-daily-edits": "Column header for edits per day",
 	"recentchangesstats-daily-pages": "Column header for pages edited per day",
 	"recentchangesstats-daily-editors": "Column header for editors active per day",
-	"recentchangesstats-daily-activity": "Column header for visual activity bar"
+	"recentchangesstats-daily-activity": "Column header for visual activity bar",
+	"action-recentpagestats-view": "{{doc-action|recentpagestats-view}}",
+	"right-recentpagestats-view": "{{doc-right|recentpagestats-view}}"
 }

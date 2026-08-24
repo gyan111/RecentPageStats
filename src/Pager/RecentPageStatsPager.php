@@ -16,7 +16,6 @@ use MWTimestamp;
 use SpecialPage;
 use TablePager;
 use WANObjectCache;
-use Wikimedia\Rdbms\IResultWrapper;
 
 /**
  * Pager for displaying per-page recent edit statistics
@@ -55,7 +54,7 @@ class RecentPageStatsPager extends TablePager {
 
 		// Set explicit sort field before calling parent to avoid empty key warnings
 		$context->getRequest()->setVal( 'sort', $this->getDefaultSort() );
-		
+
 		parent::__construct( $context );
 
 		$services = MediaWikiServices::getInstance();
@@ -91,7 +90,7 @@ class RecentPageStatsPager extends TablePager {
 			'GROUP BY' => [ 'page_id', 'page_namespace', 'page_title', 'page_len' ],
 		];
 		// TablePager will add ORDER BY based on getDefaultSort() and user clicks
-		
+
 		return [
 			'tables' => [ 'recentchanges', 'page', 'actor' ],
 			'fields' => [
@@ -100,7 +99,10 @@ class RecentPageStatsPager extends TablePager {
 				'page_title',
 				'page_len',
 				'last_timestamp' => 'MAX(rc_timestamp)',
-				'last_user_text' => 'SUBSTRING_INDEX(GROUP_CONCAT(actor_name ORDER BY rc_timestamp DESC SEPARATOR \'|\'), \'|\', 1)',
+				'last_user_text' => 'SUBSTRING_INDEX(' .
+						'GROUP_CONCAT(actor_name ORDER BY rc_timestamp DESC SEPARATOR \'|\'), ' .
+						'\'|\', 1' .
+					')',
 				'edit_count' => 'COUNT(*)',
 			],
 			'conds' => $conds,
@@ -218,7 +220,7 @@ class RecentPageStatsPager extends TablePager {
 			'page_id' => IndexPager::DIR_DESCENDING,
 		];
 	}
-	
+
 	/** @inheritDoc */
 	public function reallyDoQuery( $offset, $limit, $order ) {
 		$queryInfo = $this->getQueryInfo();
@@ -227,10 +229,10 @@ class RecentPageStatsPager extends TablePager {
 		$conds = $queryInfo['conds'] ?? [];
 		$options = $queryInfo['options'] ?? [];
 		$join_conds = $queryInfo['join_conds'] ?? [];
-		
+
 		// Add LIMIT
 		$options['LIMIT'] = $limit;
-		
+
 		// Add ORDER BY - handle both regular fields and aggregates
 		if ( $order ) {
 			$orderBy = [];
@@ -249,7 +251,7 @@ class RecentPageStatsPager extends TablePager {
 				$options['ORDER BY'] = $orderBy;
 			}
 		}
-		
+
 		return $this->mDb->select( $tables, $fields, $conds, __METHOD__, $options, $join_conds );
 	}
 
