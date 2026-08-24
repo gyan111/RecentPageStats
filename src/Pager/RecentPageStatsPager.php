@@ -53,8 +53,10 @@ class RecentPageStatsPager extends TablePager {
 		$this->includeMinor = $includeMinor;
 		$this->bypassCache = $bypassCache;
 
-		// Set explicit sort field before calling parent to avoid empty key warnings
+		// Set explicit sort field and default direction before calling parent constructor
 		$context->getRequest()->setVal( 'sort', $this->getDefaultSort() );
+		$this->mDefaultDirection = IndexPager::DIR_DESCENDING;
+		$this->mIndexField = $this->getDefaultSort();
 
 		parent::__construct( $context );
 
@@ -205,7 +207,7 @@ class RecentPageStatsPager extends TablePager {
 
 	/** @inheritDoc */
 	public function getIndexField() {
-		return 'page_id';
+		return $this->mSort ?: $this->getDefaultSort();
 	}
 
 	/** @inheritDoc */
