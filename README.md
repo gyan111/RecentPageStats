@@ -169,7 +169,7 @@ All strings are in `i18n/en.json` with documentation in `i18n/qqq.json`. To tran
 
 ## License
 
-MIT License — Copyright (c) 2026 Jnanaranjan Sahu
+[GNU General Public License 2.0 or later](https://www.gnu.org/licenses/gpl-2.0.html) (GPL-2.0-or-later).
 
 ## Author
 
