@@ -113,10 +113,7 @@ class RecentPageStatsPager extends TablePager {
 			'join_conds' => [
 				'page' => [
 					'INNER JOIN',
-					[
-						'rc_namespace = page_namespace',
-						'rc_title = page_title',
-					],
+					'rc_cur_id = page_id',
 				],
 				'actor' => [
 					'INNER JOIN',
@@ -328,7 +325,7 @@ class RecentPageStatsPager extends TablePager {
 			[
 				'page' => [
 					'INNER JOIN',
-					[ 'rc_namespace = page_namespace', 'rc_title = page_title' ],
+					'rc_cur_id = page_id',
 				],
 			]
 		);
@@ -363,7 +360,7 @@ class RecentPageStatsPager extends TablePager {
 				[
 					'page' => [
 						'INNER JOIN',
-						[ 'rc_namespace = page_namespace', 'rc_title = page_title' ],
+						'rc_cur_id = page_id',
 					],
 				]
 			);

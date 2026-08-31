@@ -3,5 +3,9 @@
 	"extends": [
 		"wikimedia/client",
 		"wikimedia/mediawiki"
+	],
+	"ignorePatterns": [
+		"mkdocs.yml",
+		"vendor/**"
 	]
 }

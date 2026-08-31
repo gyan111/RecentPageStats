@@ -33,7 +33,13 @@ class SpecialRecentChangesStats extends SpecialPage {
 	}
 
 	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'recentpagestats-view';
+	}
+
+	/** @inheritDoc */
 	public function execute( $par ) {
+		$this->checkPermissions();
 		$this->setHeaders();
 		$this->outputHeader();
 		$this->addHelpLink( 'Extension:RecentPageStats' );
@@ -150,20 +156,18 @@ class SpecialRecentChangesStats extends SpecialPage {
 
 		// 1. Summary numbers
 		$row = $dbr->selectRow(
-			[ 'recentchanges', 'actor' ],
+			'recentchanges',
 			[
 				'total_edits' => 'COUNT(*)',
 				'total_pages' => 'COUNT(DISTINCT rc_cur_id)',
-				'unique_editors' => 'COUNT(DISTINCT actor_id)',
+				'unique_editors' => 'COUNT(DISTINCT rc_actor)',
 				'new_pages' => 'SUM(CASE WHEN rc_source = ' .
 					$dbr->addQuotes( RecentChange::SRC_NEW ) . ' THEN 1 ELSE 0 END)',
 				'minor_edits' => 'SUM(CASE WHEN rc_minor = 1 THEN 1 ELSE 0 END)',
 				'avg_edits_per_page' => 'COUNT(*) / NULLIF(COUNT(DISTINCT rc_cur_id), 0)',
 			],
 			$conds,
-			__METHOD__,
-			[],
-			[ 'actor' => [ 'JOIN', 'rc_actor = actor_id' ] ]
+			__METHOD__
 		);
 
 		if ( !$row || (int)$row->total_edits === 0 ) {
@@ -181,12 +185,12 @@ class SpecialRecentChangesStats extends SpecialPage {
 
 		// 2. Namespace breakdown
 		$nsRows = $dbr->select(
-			[ 'recentchanges', 'actor' ],
+			'recentchanges',
 			[
 				'rc_namespace',
 				'ns_edits' => 'COUNT(*)',
 				'ns_pages' => 'COUNT(DISTINCT rc_cur_id)',
-				'ns_editors' => 'COUNT(DISTINCT actor_id)',
+				'ns_editors' => 'COUNT(DISTINCT rc_actor)',
 			],
 			$conds,
 			__METHOD__,
@@ -194,8 +198,7 @@ class SpecialRecentChangesStats extends SpecialPage {
 				'GROUP BY' => 'rc_namespace',
 				'ORDER BY' => 'ns_edits DESC',
 				'LIMIT' => 15,
-			],
-			[ 'actor' => [ 'JOIN', 'rc_actor = actor_id' ] ]
+			]
 		);
 
 		$namespaces = [];
@@ -219,7 +222,7 @@ class SpecialRecentChangesStats extends SpecialPage {
 			$conds,
 			__METHOD__,
 			[
-				'GROUP BY' => 'actor_id',
+				'GROUP BY' => [ 'actor_id', 'actor_name' ],
 				'ORDER BY' => 'editor_edits DESC',
 				'LIMIT' => 10,
 			],
@@ -236,28 +239,33 @@ class SpecialRecentChangesStats extends SpecialPage {
 		}
 
 		// 4. Daily activity (last N days, grouped by day)
+		$dayExpr = $dbr->buildSubstring( 'rc_timestamp', 1, 8 );
 		$dailyRows = $dbr->select(
-			[ 'recentchanges', 'actor' ],
+			'recentchanges',
 			[
-				'edit_day' => 'DATE(rc_timestamp)',
+				'edit_day' => $dayExpr,
 				'day_edits' => 'COUNT(*)',
 				'day_pages' => 'COUNT(DISTINCT rc_cur_id)',
-				'day_editors' => 'COUNT(DISTINCT actor_id)',
+				'day_editors' => 'COUNT(DISTINCT rc_actor)',
 			],
 			$conds,
 			__METHOD__,
 			[
-				'GROUP BY' => 'edit_day',
+				'GROUP BY' => $dayExpr,
 				'ORDER BY' => 'edit_day DESC',
 				'LIMIT' => min( $this->days, 30 ),
-			],
-			[ 'actor' => [ 'JOIN', 'rc_actor = actor_id' ] ]
+			]
 		);
 
 		$dailyActivity = [];
 		foreach ( $dailyRows as $dayRow ) {
+			$rawDate = (string)$dayRow->edit_day;
+			$formattedDate = strlen( $rawDate ) >= 8
+				? substr( $rawDate, 0, 4 ) . '-' . substr( $rawDate, 4, 2 ) . '-' . substr( $rawDate, 6, 2 )
+				: $rawDate;
+
 			$dailyActivity[] = [
-				'date' => $dayRow->edit_day,
+				'date' => $formattedDate,
 				'edits' => (int)$dayRow->day_edits,
 				'pages' => (int)$dayRow->day_pages,
 				'editors' => (int)$dayRow->day_editors,

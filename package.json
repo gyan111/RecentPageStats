@@ -1,5 +1,5 @@
 {
-	"name": "BoilerPlate",
+	"name": "RecentPageStats",
 	"private": true,
 	"scripts": {
 		"test": "grunt test"

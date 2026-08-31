@@ -30,7 +30,13 @@ class SpecialRecentPageStats extends SpecialPage {
 	}
 
 	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'recentpagestats-view';
+	}
+
+	/** @inheritDoc */
 	public function execute( $par ) {
+		$this->checkPermissions();
 		$this->setHeaders();
 		$this->outputHeader();
 		$this->addHelpLink( 'Extension:RecentPageStats' );
